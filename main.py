@@ -1,9 +1,17 @@
+from fastapi.middleware.cors import CORSMiddleware
 import sqlite3
 import hashlib # <-- La herramienta matemática para encriptar
 from fastapi import FastAPI
 from pydantic import BaseModel
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # El asterisco significa "permitir de cualquier origen"
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def init_db():
     conn = sqlite3.connect("raices_digitales.db")

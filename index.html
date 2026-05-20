@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raíces Digitales</title>
+    
+    <style>
+        body {
+            background-color: #1a1d1a; /* Fondo oscuro, tono bosque nocturno */
+            color: #d1e2c4; /* Texto en tono verde hoja pálido */
+            font-family: 'Courier New', Courier, monospace; /* Tipografía estilo documento técnico/máquina de escribir */
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: #5c9954; 
+            border-bottom: 1px solid #3d5a36;
+            padding-bottom: 10px;
+            letter-spacing: 2px;
+        }
+        .contenedor {
+            background-color: #242b23;
+            border: 1px solid #3d5a36;
+            border-radius: 4px;
+            padding: 40px;
+            max-width: 500px;
+            margin: 0 auto;
+            box-shadow: 0 4px 20px rgba(199, 30, 30, 0.6);
+        }
+        input {
+            padding: 12px;
+            width: 80%;
+            margin-top: 15px;
+            background-color: #121412;
+            color: #d1e2c4;
+            border: 1px solid #5c9954;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        button {
+            background-color: #5c9954;
+            color: #1a1d1a;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 25px;
+            border-radius: 2px;
+            text-transform: uppercase;
+        }
+        button:hover {
+            background-color: #72b569;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="contenedor">
+        <h1>RAÍCES DIGITALES</h1>
+        <p>Resistencia y Memoria Biocultural</p>
+        <p style="font-size: 0.9em; color: #88a37e;">Ingresa la denominación del espacio para generar su registro criptográfico en la red.</p>
+        
+        <input type="text" id="nombreHuerto" placeholder="Identificador del huerto...">
+        <br>
+        <button onclick="registrar()">Generar Hash</button>
+    </div>
+
+    <<script>
+    async function registrar() {
+        let nombre = document.getElementById('nombreHuerto').value;
+        
+        if(nombre === "") {
+            alert("Por favor, ingresa un identificador válido.");
+            return;
+        }
+
+        const url_api = "https://api-raices-digitales.onrender.com/registrar_huerto/";
+        
+        try {
+            document.querySelector('button').innerText = "Encriptando...";
+
+            let respuesta = await fetch(url_api, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ nombre: nombre, ubicacion: "León, Gto." }) 
+            });
+
+            let datos = await respuesta.json();
+            alert("¡Registro Protegido!\n\n" + datos.mensaje);
+            
+            document.getElementById('nombreHuerto').value = "";
+            document.querySelector('button').innerText = "Generar Hash";
+            
+        } catch (error) {
+            alert("Error de conexión con la red de resistencia.");
+            document.querySelector('button').innerText = "Generar Hash";
+        }
+    }
+</script>
+
+</body>
+</html>
