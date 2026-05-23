@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Terminal de Operaciones P2P - Raíces Digitales</title>
+    <title>Terminal P2P - Raíces Digitales</title>
     <style>
-        /* Estilos Base - Resistencia Digital */
+        /* Estilos Base */
         body {
             margin: 0;
             padding: 0;
@@ -17,9 +17,9 @@
             overflow: hidden;
         }
 
-        /* Barra Lateral (Sidebar) */
+        /* Barra Lateral */
         .sidebar {
-            width: 250px;
+            width: 260px;
             background-color: #111311;
             border-right: 1px solid #333;
             padding: 20px;
@@ -44,10 +44,31 @@
             font-size: 1.1em;
             border-bottom: 1px solid #222;
             transition: color 0.3s ease;
+            cursor: pointer;
         }
 
         .menu-item:hover, .menu-item.active {
             color: #00ff00;
+        }
+
+        /* Botón del Mapa */
+        .btn-mapa {
+            background-color: transparent;
+            color: #00ff00;
+            border: 1px solid #00ff00;
+            padding: 12px;
+            margin-top: 30px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .btn-mapa:hover {
+            background-color: rgba(0, 255, 0, 0.1);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
         }
 
         /* Contenido Principal */
@@ -68,14 +89,56 @@
             padding-bottom: 10px;
         }
 
-        /* Cuadrícula de Huertos (Grid) */
+        /* Sistema de Vistas (Tabs) */
+        .view-section {
+            display: none; /* Oculto por defecto */
+        }
+        .view-section.active {
+            display: block; /* Solo se muestra el activo */
+        }
+
+        /* Estilos del Formulario de Registro */
+        .form-container {
+            background-color: #2a2d2a;
+            border: 1px solid #444;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 600px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #aaa;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 10px;
+            background-color: #111311;
+            border: 1px solid #555;
+            color: #00ff00;
+            font-family: 'Courier New', Courier, monospace;
+            box-sizing: border-box;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #00ff00;
+        }
+
+        /* Cuadrícula de Mercado (Grid) */
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 25px;
         }
 
-        /* Tarjeta P2P */
         .card {
             background-color: #2a2d2a;
             border: 1px solid #444;
@@ -86,20 +149,9 @@
             flex-direction: column;
         }
 
-        .card-title {
-            color: #00ff00;
-            font-size: 1.4em;
-            margin: 0 0 10px 0;
-            text-transform: uppercase;
-        }
-
-        .card-stock {
-            color: #aaa;
-            font-size: 1em;
-            margin-bottom: 20px;
-        }
-
-        /* Terminal Hash */
+        .card-title { color: #00ff00; font-size: 1.4em; margin: 0 0 10px 0; text-transform: uppercase; }
+        .card-stock { color: #aaa; font-size: 1em; margin-bottom: 20px; }
+        
         .terminal {
             background-color: #000;
             border: 1px solid #00ff00;
@@ -109,13 +161,10 @@
             color: #00ff00;
             margin-bottom: 25px;
             word-wrap: break-word;
-            box-shadow: inset 0 0 5px rgba(0, 255, 0, 0.2);
         }
-
         .terminal-prompt { color: #888; }
 
-        /* Botón de Conexión P2P */
-        .btn-connect {
+        .btn-action {
             background-color: #00ff00;
             color: #1a1d1a;
             border: none;
@@ -123,66 +172,111 @@
             font-size: 1em;
             font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
-            border-radius: 4px;
             cursor: pointer;
             text-transform: uppercase;
-            margin-top: auto;
+            width: 100%;
             transition: all 0.3s ease;
         }
+        .btn-action:hover { background-color: #00cc00; transform: translateY(-2px); }
 
-        .btn-connect:hover {
-            background-color: #00cc00;
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.6);
-            transform: translateY(-2px);
-        }
     </style>
 </head>
 <body>
 
     <nav class="sidebar">
         <div class="logo-text">Raíces<br>Digitales</div>
-        <a href="#" class="menu-item active">> Mercado P2P</a>
-        <a href="#" class="menu-item">> Mis Contratos</a>
-        <a href="#" class="menu-item">> Auditoría Criptográfica</a>
+        
+        <div class="menu-item active" onclick="cambiarVista('registro', this)">> Registro de Huertos</div>
+        <div class="menu-item" onclick="cambiarVista('mercado', this)">> Mercado P2P</div>
+        <div class="menu-item">> Mis Contratos</div>
+        <div class="menu-item">> Auditoría Criptográfica</div>
+
+        <button class="btn-mapa" onclick="abrirMapa()">📍 HUERTOS CERCA DE MÍ</button>
     </nav>
 
     <main class="main-content">
-        <h1>Terminal de Operaciones P2P</h1>
         
-        <div class="grid-container">
-            
-            <div class="card">
-                <h2 class="card-title">Huerto El Coecillo</h2>
-                <div class="card-stock">Tomate Riñón - 15 KG Disponibles</div>
-                <div class="terminal">
-                    <span class="terminal-prompt">root@raices:~#</span> verify_origin --id HC01<br>
-                    SHA-256: 8f4e2c9a1d3b5f6e7a8c9b0d1e2f3a4b...
+        <div id="registro" class="view-section active">
+            <h1>Alta en la Red P2P</h1>
+            <div class="form-container">
+                <div class="form-group">
+                    <label>Nombre del Huerto Urbano:</label>
+                    <input type="text" placeholder="Ej. Nodo Coecillo">
                 </div>
-                <button class="btn-connect">CONECTAR Y ACORDAR ENTREGA</button>
-            </div>
-
-            <div class="card">
-                <h2 class="card-title">Jardines de San Juan</h2>
-                <div class="card-stock">Lechuga Hidropónica - 8 KG Disponibles</div>
-                <div class="terminal">
-                    <span class="terminal-prompt">root@raices:~#</span> verify_origin --id JSJ02<br>
-                    SHA-256: 3b5f6e7a8c9b0d1e2f3a4b8f4e2c9a1d...
+                <div class="form-group">
+                    <label>Zona / Barrio en León:</label>
+                    <input type="text" placeholder="Ej. El Coecillo, San Juan...">
                 </div>
-                <button class="btn-connect">CONECTAR Y ACORDAR ENTREGA</button>
-            </div>
-
-            <div class="card">
-                <h2 class="card-title">Terraza Madero</h2>
-                <div class="card-stock">Chile Habanero - 3 KG Disponibles</div>
-                <div class="terminal">
-                    <span class="terminal-prompt">root@raices:~#</span> verify_origin --id TM03<br>
-                    SHA-256: d1e2f3a4b8f4e2c9a1d3b5f6e7a8c9b0...
+                <div class="form-group">
+                    <label>Técnica de Cultivo:</label>
+                    <select>
+                        <option>Hidroponía</option>
+                        <option>Suelo Directo</option>
+                        <option>Macetas / Contenedores</option>
+                        <option>Vertical</option>
+                    </select>
                 </div>
-                <button class="btn-connect">CONECTAR Y ACORDAR ENTREGA</button>
+                <div class="form-group">
+                    <label>Excedentes Comerciales Disponibles:</label>
+                    <input type="text" placeholder="Ej. Tomate, Lechuga, Habanero...">
+                </div>
+                <button class="btn-action">GENERAR SELLO CRIPTOGRÁFICO Y REGISTRAR</button>
             </div>
-
         </div>
+
+        <div id="mercado" class="view-section">
+            <h1>Terminal de Operaciones P2P</h1>
+            <div class="grid-container">
+                
+                <div class="card">
+                    <h2 class="card-title">Huerto El Coecillo</h2>
+                    <div class="card-stock">Tomate Riñón - 15 KG Disponibles</div>
+                    <div class="terminal">
+                        <span class="terminal-prompt">root@raices:~#</span> verify_origin --id HC01<br>
+                        SHA-256: 8f4e2c9a1d3b5f6e7a8c9b0d1e2f3a4b...
+                    </div>
+                    <button class="btn-action">ACORDAR ENTREGA</button>
+                </div>
+
+                <div class="card">
+                    <h2 class="card-title">Jardines de San Juan</h2>
+                    <div class="card-stock">Lechuga Hidropónica - 8 KG Disponibles</div>
+                    <div class="terminal">
+                        <span class="terminal-prompt">root@raices:~#</span> verify_origin --id JSJ02<br>
+                        SHA-256: 3b5f6e7a8c9b0d1e2f3a4b8f4e2c9a1d...
+                    </div>
+                    <button class="btn-action">ACORDAR ENTREGA</button>
+                </div>
+
+            </div>
+        </div>
+
     </main>
 
+    <script>
+        // Función para cambiar entre pantallas (Registro / Mercado)
+        function cambiarVista(idVista, elementoMenu) {
+            // 1. Ocultar todas las vistas
+            document.querySelectorAll('.view-section').forEach(function(seccion) {
+                seccion.classList.remove('active');
+            });
+            // 2. Mostrar solo la vista solicitada
+            document.getElementById(idVista).classList.add('active');
+
+            // 3. Quitar color verde a todos los items del menú
+            document.querySelectorAll('.menu-item').forEach(function(item) {
+                item.classList.remove('active');
+            });
+            // 4. Poner verde solo al seleccionado
+            elementoMenu.classList.add('active');
+        }
+
+        // Función para abrir el Google My Maps en una pestaña nueva
+        function abrirMapa() {
+            // AQUI_VA_TU_LINK_DE_MYMAPS (Pega tu enlace entre las comillas)
+            var linkMyMaps = "https://www.google.com/maps/d/edit?hl=es-419&mid=1pSM-WerpUjESwBKnYsa3SrVMMPtg28ba&ll=21.08337138813542%2C-101.67414639999998&z=11"; 
+            window.open(linkMyMaps, '_blank');
+        }
+    </script>
 </body>
 </html>
