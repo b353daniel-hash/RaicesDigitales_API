@@ -2,9 +2,11 @@ from fastapi.middleware.cors import CORSMiddleware
 import sqlite3
 import hashlib # <-- La herramienta matemática para encriptar
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse # <-- Nueva importación para servir tu interfaz
 from pydantic import BaseModel
 
 app = FastAPI()
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"], # El asterisco significa "permitir de cualquier origen"
@@ -43,11 +45,27 @@ class Huerto(BaseModel):
     nombre: str
     barrio: str
     tecnica_cultivo: str
+    historia_oral: str
+    contacto_enlace: str
+    coordenadas_zona: str
+    excedentes_disponibles: list  # Ej. ["Hierbas de olor", "Flores comestibles", "Plántulas"]
+    capacidad_comercial: bool     # True si están abiertos a proveer a locales
 
-@app.get("/")
-def leer_raiz():
-    return {"mensaje": "API de Raíces Digitales: Memoria y Seguridad Activas"}
+# --- EL PUENTE WEB: TU DASHBOARD P2P ---
+@app.get("/", response_class=HTMLResponse)
+async def mostrar_plataforma():
+    # El servidor lee tu archivo dashboard.html y lo manda al navegador
+    try:
+        with open("dashboard.html", "r", encoding="utf-8") as f:
+            codigo_html = f.read()
+        return HTMLResponse(content=codigo_html, status_code=200)
+    except FileNotFoundError:
+        return HTMLResponse(
+            content="<h1>Error: No se encontró dashboard.html</h1><p>Asegúrate de que el archivo se llame exactamente así y esté en la misma carpeta que main.py.</p>", 
+            status_code=404
+        )
 
+# --- RUTAS DE LA API (BACKEND) ---
 @app.post("/registrar_huerto/")
 def registrar(huerto: Huerto):
     # Generamos la huella dactilar ANTES de guardar
@@ -81,3 +99,4 @@ def obtener_huertos():
     for d in datos:
         lista.append({"nombre": d[0], "barrio": d[1], "tecnica": d[2], "sello": d[3]})
     return {"huertos_protegidos": lista}
+

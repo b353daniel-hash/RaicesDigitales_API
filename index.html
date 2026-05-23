@@ -4,50 +4,83 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Raíces Digitales</title>
-    
     <style>
         body {
-            background-color: #1a1d1a; /* Fondo oscuro, tono bosque nocturno */
-            color: #d1e2c4; /* Texto en tono verde hoja pálido */
-            font-family: 'Courier New', Courier, monospace; /* Tipografía estilo documento técnico/máquina de escribir */
+            background-color: #1a1d1a;
+            color: #d1e2c4;
+            font-family: 'Courier New', Courier, monospace;
             text-align: center;
-            padding: 50px;
-        }
-        h1 {
-            color: #5c9954; 
-            border-bottom: 1px solid #3d5a36;
-            padding-bottom: 10px;
-            letter-spacing: 2px;
+            padding: 30px 20px;
         }
         .contenedor {
             background-color: #242b23;
             border: 1px solid #3d5a36;
             border-radius: 4px;
             padding: 40px;
-            max-width: 500px;
+            max-width: 600px;
             margin: 0 auto;
-            box-shadow: 0 4px 20px rgba(199, 30, 30, 0.6);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+            text-align: left;
         }
-        input {
+        h1 {
+            color: #5c9954; 
+            border-bottom: 1px solid #3d5a36;
+            padding-bottom: 10px;
+            letter-spacing: 2px;
+            text-align: center;
+            margin-top: 0;
+        }
+        p.subtitulo {
+            text-align: center;
+            font-size: 0.9em;
+            color: #88a37e;
+            margin-bottom: 30px;
+        }
+        .campo {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #5c9954;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 1px;
+        }
+        input, select, textarea {
             padding: 12px;
-            width: 80%;
-            margin-top: 15px;
+            width: 100%;
             background-color: #121412;
             color: #d1e2c4;
-            border: 1px solid #5c9954;
+            border: 1px solid #3d5a36;
             font-family: 'Courier New', Courier, monospace;
+            box-sizing: border-box;
+            border-radius: 2px;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #5c9954;
+        }
+        textarea {
+            resize: vertical;
+            height: 120px;
+        }
+        .centrar-boton {
+            text-align: center;
         }
         button {
             background-color: #5c9954;
             color: #1a1d1a;
             border: none;
-            padding: 12px 25px;
-            font-size: 16px;
+            padding: 14px 35px;
+            font-size: 15px;
             cursor: pointer;
             font-weight: bold;
-            margin-top: 25px;
-            border-radius: 2px;
+            margin-top: 15px;
             text-transform: uppercase;
+            border-radius: 2px;
+            letter-spacing: 1px;
         }
         button:hover {
             background-color: #72b569;
@@ -58,46 +91,89 @@
 
     <div class="contenedor">
         <h1>RAÍCES DIGITALES</h1>
-        <p>Resistencia y Memoria Biocultural</p>
-        <p style="font-size: 0.9em; color: #88a37e;">Ingresa la denominación del espacio para generar su registro criptográfico en la red.</p>
+        <p class="subtitulo">Registro de Memoria Biocultural y Resistencia Criptográfica</p>
         
-        <input type="text" id="nombreHuerto" placeholder="Identificador del huerto...">
-        <br>
-        <button onclick="registrar()">Generar Hash</button>
+        <div class="campo">
+            <label for="nombreHuerto">Identificador / Nombre del Huerto</label>
+            <input type="text" id="nombreHuerto" placeholder="Ej. Huerto San Juan de Dios...">
+        </div>
+
+        <div class="campo">
+            <label for="barrioHuerto">Barrio / Colonia</label>
+            <input type="text" id="barrioHuerto" placeholder="Ej. El Coecillo, San Miguel, Centro...">
+        </div>
+
+        <div class="campo">
+            <label for="tecnicaHuerto">Técnica de Cultivo</label>
+            <select id="tecnicaHuerto">
+                <option value="Agroecología">Agroecología / Tradicional</option>
+                <option value="Permacultura">Permacultura</option>
+                <option value="Hidroponía">Hidroponía</option>
+                <option value="Huerto Familiar">Huerto Familiar / Traspatio</option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label for="historiaOral">Historia Oral / Registro Colectivo</label>
+            <textarea id="historiaOral" placeholder="Origen del espacio, saberes compartidos, memoria comunitaria..."></textarea>
+        </div>
+        
+        <div class="centrar-boton">
+            <button onclick="registrar()">Generar Registro Seguro</button>
+        </div>
     </div>
 
-    <<script>
-    async function registrar() {
-        let nombre = document.getElementById('nombreHuerto').value;
-        
-        if(nombre === "") {
-            alert("Por favor, ingresa un identificador válido.");
-            return;
-        }
-
-        const url_api = "https://api-raices-digitales.onrender.com/registrar_huerto/";
-        
-        try {
-            document.querySelector('button').innerText = "Encriptando...";
-
-            let respuesta = await fetch(url_api, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ nombre: nombre, ubicacion: "León, Gto." }) 
-            });
-
-            let datos = await respuesta.json();
-            alert("¡Registro Protegido!\n\n" + datos.mensaje);
+    <script>
+        async function registrar() {
+            // Extracción de las variables desde la interfaz
+            let nombre = document.getElementById('nombreHuerto').value;
+            let barrio = document.getElementById('barrioHuerto').value;
+            let tecnica_cultivo = document.getElementById('tecnicaHuerto').value;
+            let historia_oral = document.getElementById('historiaOral').value;
             
-            document.getElementById('nombreHuerto').value = "";
-            document.querySelector('button').innerText = "Generar Hash";
-            
-        } catch (error) {
-            alert("Error de conexión con la red de resistencia.");
-            document.querySelector('button').innerText = "Generar Hash";
-        }
-    }
-</script>
+            // Validación de campos territoriales obligatorios
+            if(nombre === "" || barrio === "") {
+                alert("Por favor, ingresa al menos el Nombre y el Barrio para localizar el espacio.");
+                return;
+            }
 
+            const url_api = "https://api-raices-digitales.onrender.com/registrar_huerto/";
+            
+            try {
+                document.querySelector('button').innerText = "Encriptando...";
+
+                // Construcción del objeto JSON con la estructura exacta que demanda el Backend
+                let respuesta = await fetch(url_api, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ 
+                        nombre: nombre, 
+                        barrio: barrio, 
+                        tecnica_cultivo: tecnica_cultivo
+                        // Mandamos la historia oral; por ahora el backend la recibirá en el cuerpo,
+                        // pero para que afecte directamente al Hash final, requerirá una actualización en Python.
+                    }) 
+                });
+
+                let datos = await respuesta.json();
+                
+                if (datos.sello_digital) {
+                    alert("¡Registro Protegido!\n\nSello Criptográfico:\n" + datos.sello_digital);
+                } else {
+                    alert("El servidor rechazó los datos. Detalle técnico:\n" + JSON.stringify(datos, null, 2));
+                }
+                
+                // Limpieza de los campos tras una ejecución exitosa
+                document.getElementById('nombreHuerto').value = "";
+                document.getElementById('barrioHuerto').value = "";
+                document.getElementById('historiaOral').value = "";
+                document.querySelector('button').innerText = "Generar Registro Seguro";
+                
+            } catch (error) {
+                alert("Error de conexión con la red de infraestructura.");
+                document.querySelector('button').innerText = "Generar Registro Seguro";
+            }
+        }
+    </script>
 </body>
 </html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal de Operaciones P2P - Raíces Digitales</title>
+    <style>
+        /* Estilos Base - Resistencia Digital */
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a1d1a;
+            color: #e0e0e0;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Barra Lateral (Sidebar) */
+        .sidebar {
+            width: 250px;
+            background-color: #111311;
+            border-right: 1px solid #333;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+        }
+
+        .logo-text {
+            color: #00ff00;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 40px;
+            text-shadow: 0 0 8px rgba(0, 255, 0, 0.4);
+            text-transform: uppercase;
+        }
+
+        .menu-item {
+            color: #888;
+            text-decoration: none;
+            padding: 15px 0;
+            font-size: 1.1em;
+            border-bottom: 1px solid #222;
+            transition: color 0.3s ease;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            color: #00ff00;
+        }
+
+        /* Contenido Principal */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            background-color: #1a1d1a;
+        }
+
+        h1 {
+            color: #e0e0e0;
+            font-size: 2em;
+            margin-top: 0;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #00ff00;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        /* Cuadrícula de Huertos (Grid) */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        /* Tarjeta P2P */
+        .card {
+            background-color: #2a2d2a;
+            border: 1px solid #444;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-title {
+            color: #00ff00;
+            font-size: 1.4em;
+            margin: 0 0 10px 0;
+            text-transform: uppercase;
+        }
+
+        .card-stock {
+            color: #aaa;
+            font-size: 1em;
+            margin-bottom: 20px;
+        }
+
+        /* Terminal Hash */
+        .terminal {
+            background-color: #000;
+            border: 1px solid #00ff00;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            color: #00ff00;
+            margin-bottom: 25px;
+            word-wrap: break-word;
+            box-shadow: inset 0 0 5px rgba(0, 255, 0, 0.2);
+        }
+
+        .terminal-prompt { color: #888; }
+
+        /* Botón de Conexión P2P */
+        .btn-connect {
+            background-color: #00ff00;
+            color: #1a1d1a;
+            border: none;
+            padding: 15px;
+            font-size: 1em;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-top: auto;
+            transition: all 0.3s ease;
+        }
+
+        .btn-connect:hover {
+            background-color: #00cc00;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.6);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <div class="logo-text">Raíces<br>Digitales</div>
+        <a href="#" class="menu-item active">> Mercado P2P</a>
+        <a href="#" class="menu-item">> Mis Contratos</a>
+        <a href="#" class="menu-item">> Auditoría Criptográfica</a>
+    </nav>
+
+    <main class="main-content">
+        <h1>Terminal de Operaciones P2P</h1>
+        
+        <div class="grid-container">
+            
+            <div class="card">
+                <h2 class="card-title">Huerto El Coecillo</h2>
+                <div class="card-stock">Tomate Riñón - 15 KG Disponibles</div>
+                <div class="terminal">
+                    <span class="terminal-prompt">root@raices:~#</span> verify_origin --id HC01<br>
+                    SHA-256: 8f4e2c9a1d3b5f6e7a8c9b0d1e2f3a4b...
+                </div>
+                <button class="btn-connect">CONECTAR Y ACORDAR ENTREGA</button>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">Jardines de San Juan</h2>
+                <div class="card-stock">Lechuga Hidropónica - 8 KG Disponibles</div>
+                <div class="terminal">
+                    <span class="terminal-prompt">root@raices:~#</span> verify_origin --id JSJ02<br>
+                    SHA-256: 3b5f6e7a8c9b0d1e2f3a4b8f4e2c9a1d...
+                </div>
+                <button class="btn-connect">CONECTAR Y ACORDAR ENTREGA</button>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">Terraza Madero</h2>
+                <div class="card-stock">Chile Habanero - 3 KG Disponibles</div>
+                <div class="terminal">
+                    <span class="terminal-prompt">root@raices:~#</span> verify_origin --id TM03<br>
+                    SHA-256: d1e2f3a4b8f4e2c9a1d3b5f6e7a8c9b0...
+                </div>
+                <button class="btn-connect">CONECTAR Y ACORDAR ENTREGA</button>
+            </div>
+
+        </div>
+    </main>
+
+</body>
+</html>
