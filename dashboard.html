@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Raíces Digitales</title>
+  <title>Germinal B2B</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Fraunces:wght@600;700&display=swap" rel="stylesheet">
   <style>
@@ -71,7 +71,7 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 22px;
     }
-    .logo-text { font-family: var(--font-head); font-size: 1.15em; color: var(--sage); line-height: 1.2; }
+    .logo-text { font-family: var(--font-head); font-size: 1.3em; font-weight: 700; color: var(--sage); letter-spacing: 0.05em; line-height: 1.2; }
     .logo-sub  { font-size: 0.72em; color: var(--text-soft); font-family: var(--font-body); font-weight: 500; }
 
     .nav-group { margin-bottom: 8px; }
@@ -431,8 +431,8 @@
   <div class="logo-wrap">
     <div class="logo-icon">🌱</div>
     <div>
-      <div class="logo-text">Raíces<br>Digitales</div>
-      <div class="logo-sub">Red agrícola · Guanajuato</div>
+      <div class="logo-text">GERMINAL</div>
+      <div class="logo-sub">E-commerce agrícola · Guanajuato</div>
     </div>
   </div>
 
@@ -551,9 +551,9 @@
 
       <div class="form-row full">
         <div class="form-group">
-          <label>¿Cómo te pueden contactar los compradores?</label>
-          <div class="label-hint">Correo electrónico o WhatsApp</div>
-          <input type="text" id="f-contacto" placeholder="Ej. rancho@correo.com / 477 000 0000">
+          <label>Tu número de WhatsApp (Uso interno y confidencial)</label>
+          <div class="label-hint">Germinal te contactará por aquí cuando un restaurante compre tus productos. Los compradores NO verán tu número.</div>
+          <input type="text" id="f-contacto" placeholder="Ej. 477 000 0000">
         </div>
       </div>
 
@@ -584,7 +584,7 @@
 
     <div class="cert-intro">
       <b>¿Para qué sirve certificarse?</b> Los compradores comerciales y restaurantes exigen que los alimentos
-      cumplan normas de higiene y calidad. Raíces Digitales te guía paso a paso y te conecta con instituciones locales que <b>subsidian el costo</b>.
+      cumplan normas de higiene y calidad. Germinal te guía paso a paso y te conecta con instituciones locales que <b>subsidian el costo</b>.
     </div>
 
     <div class="section-label">Certificaciones principales</div>
@@ -673,7 +673,7 @@
       <div class="inst-title">Secretaría del Campo de Guanajuato (SECAM)</div>
       <div class="inst-desc">
         La SECAM tiene programas activos para apoyar a productores
-        en certificación, comercialización y tecnificación. Raíces Digitales
+        en certificación, comercialización y tecnificación. Germinal
         gestiona el primer contacto.
       </div>
       <ul class="inst-list">
@@ -690,15 +690,15 @@
 
 </main>
 
-<div class="modal-wrap" id="m-contactar" onclick="cFondo(event,'m-contactar')">
+<div class="modal-wrap" id="m-cotizar" onclick="cFondo(event,'m-cotizar')">
   <div class="modal">
-    <div class="modal-icon">🤝</div>
-    <h3>Contactar productor</h3>
-    <p>Le haremos llegar tu solicitud. El productor decide si responde y en qué términos.</p>
-    <div class="modal-info" id="m-contactar-info"></div>
+    <div class="modal-icon">🛒</div>
+    <h3>Cotizar insumos</h3>
+    <p>Germinal gestionará la compra, la logística de última milla y la facturación de este pedido para tu restaurante.</p>
+    <div class="modal-info" id="m-cotizar-info"></div>
     <div class="modal-btns">
-      <button class="btn-cancel-m" onclick="cerrar('m-contactar')">Cancelar</button>
-      <button class="btn-ok-m"     onclick="cerrar('m-contactar')">Enviar solicitud</button>
+      <button class="btn-cancel-m" onclick="cerrar('m-cotizar')">Cancelar</button>
+      <button class="btn-ok-m terra" onclick="cerrar('m-cotizar'); alert('✅ Solicitud enviada con éxito. El equipo de Germinal se pondrá en contacto contigo para confirmar precios y logística de entrega.');">Solicitar cotización</button>
     </div>
   </div>
 </div>
@@ -731,7 +731,7 @@
   <div class="modal">
     <div class="modal-icon">🏛️</div>
     <h3>Vinculación con la SECAM</h3>
-    <p>Raíces Digitales gestionará el contacto con la Secretaría del Campo de Guanajuato en tu nombre.</p>
+    <p>Germinal gestionará el contacto con la Secretaría del Campo de Guanajuato en tu nombre.</p>
     <div class="modal-info">
       Recibirás información sobre programas disponibles, fechas de capacitación
       y los pasos para acceder a subsidios de certificación.
@@ -745,7 +745,7 @@
 
 <script>
   /* ── Configuración de Mapa y Almacenamiento ── */
-  var MAP_URL  = "https://www.google.com/maps"; 
+  var MAP_URL  = "https://www.google.com/maps/d/edit?hl=es-419&mid=1pSM-WerpUjESwBKnYsa3SrVMMPtg28ba&ll=21.083291920987243%2C-101.67414639999998&z=11"; 
   var STORE    = 'rd_v4';
 
   var EMOJIS = { 
@@ -816,18 +816,19 @@
         +(h.volumen?'<div class="card-volumen">📦 Disponible: '+esc(h.volumen)+'</div>':'')
         +(h.desc?'<div class="card-desc">'+esc(h.desc)+'</div>':'')
         +'<div class="card-id">ID: '+esc(h.id)+'  ·  Alta: '+esc(h.fecha)+'</div>'
-        +'<button class="btn-contactar" onclick=\'abrirContactar('+JSON.stringify(h).replace(/'/g,"\\'")+')\'>'
-        +'🤝 Contactar productor</button></div>';
+        +'<button class="btn-contactar" onclick=\'abrirCotizar('+JSON.stringify(h).replace(/'/g,"\\'")+')\'>'
+        +'🛒 Cotizar pedido</button></div>';
     }).join('');
   }
 
-  function abrirContactar(h) {
-    id('m-contactar-info').innerHTML=
-      '<b>'+esc(h.nombre)+'</b> · '+esc(h.barrio)+'<br>'
-      +(h.producto?'Producto: '+esc(h.producto)+'<br>':'')
-      +(h.volumen?'Disponible: '+esc(h.volumen)+'<br>':'')
-      +(h.contacto?'Contacto: '+esc(h.contacto):'Sin contacto público — el productor responderá si acepta.');
-    id('m-contactar').classList.add('show');
+  function abrirCotizar(h) {
+    id('m-cotizar-info').innerHTML=
+      '<b>Productor de origen:</b> ' + esc(h.nombre) + '<br>' +
+      '<b>Zona de cultivo:</b> ' + esc(h.barrio) + '<br><br>' +
+      (h.producto ? '<b>Insumo solicitado:</b> ' + esc(h.producto) + '<br>' : '') +
+      (h.volumen ? '<b>Volumen disponible en red:</b> ' + esc(h.volumen) + '<br>' : '') +
+      '<br><span style="font-size:12px; color:var(--sage);">✓ Transacción protegida y facturada por Germinal</span>';
+    id('m-cotizar').classList.add('show');
   }
 
   function verInfo(cod,nom,txt) {
