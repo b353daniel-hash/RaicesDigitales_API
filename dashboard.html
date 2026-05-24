@@ -4,599 +4,851 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Raíces Digitales</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Fraunces:wght@600;700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:       #1a1d1a;
-      --bg-dark:  #111311;
-      --bg-card:  #232623;
-      --border:   #2e322e;
-      --green:    #5aad4e;
-      --green-hi: #7acc6e;
-      --text:     #d4d8d4;
-      --muted:    #7a807a;
-      --font:     'Courier New', Courier, monospace;
+      --cream:      #F7F4EE;
+      --white:      #FFFFFF;
+      --sage:       #4A7C59;
+      --sage-light: #EAF2ED;
+      --sage-mid:   #6B9E7A;
+      --terra:      #B86A3A;
+      --terra-light:#FBF0E9;
+      --brown:      #7A5C3A;
+      --text:       #1E1E1E;
+      --text-mid:   #4A4A4A;
+      --text-soft:  #7A7A72;
+      --border:     #DDD9CE;
+      --border-soft:#EDEAE3;
+      --shadow:     0 2px 12px rgba(0,0,0,0.07);
+      --shadow-md:  0 4px 24px rgba(0,0,0,0.10);
+      --radius:     12px;
+      --radius-sm:  8px;
+      --font-body:  'Nunito', sans-serif;
+      --font-head:  'Fraunces', serif;
     }
 
     body {
-      background: var(--bg);
+      font-family: var(--font-body);
+      background: var(--cream);
       color: var(--text);
-      font-family: var(--font);
       display: flex;
-      height: 100vh;
-      overflow: hidden;
+      min-height: 100vh;
+      font-size: 16px;
+      overflow: hidden; /* Evita doble scroll */
     }
 
     /* ── SIDEBAR ─────────────────────────────────── */
     .sidebar {
-      width: 240px;
-      background: var(--bg-dark);
+      width: 270px;
+      background: var(--white);
       border-right: 1px solid var(--border);
       display: flex;
       flex-direction: column;
-      padding: 28px 20px;
+      padding: 32px 20px;
       flex-shrink: 0;
+      height: 100vh;
+      overflow-y: auto;
+      box-shadow: 2px 0 12px rgba(0,0,0,0.04);
+      z-index: 10;
     }
 
-    .logo {
-      font-size: 1.1em;
-      font-weight: bold;
-      color: var(--green);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 36px;
-      line-height: 1.4;
-    }
-    .logo span {
-      display: block;
-      font-size: 0.7em;
-      color: var(--muted);
-      letter-spacing: 0.05em;
-      font-weight: normal;
-      margin-top: 4px;
-    }
-
-    .nav-item {
-      color: var(--muted);
-      padding: 11px 0;
-      font-size: 0.85em;
-      border-bottom: 1px solid var(--border);
-      cursor: pointer;
-      transition: color 0.2s;
+    .logo-wrap {
       display: flex;
       align-items: center;
-      gap: 8px;
-      user-select: none;
+      gap: 12px;
+      margin-bottom: 36px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-soft);
     }
-    .nav-item::before { content: '>'; color: var(--border); transition: color 0.2s; }
-    .nav-item:hover,
-    .nav-item.active { color: var(--green); }
-    .nav-item.active::before,
-    .nav-item:hover::before { color: var(--green); }
+    .logo-icon {
+      width: 44px; height: 44px;
+      background: var(--sage-light);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+    }
+    .logo-text { font-family: var(--font-head); font-size: 1.15em; color: var(--sage); line-height: 1.2; }
+    .logo-sub  { font-size: 0.72em; color: var(--text-soft); font-family: var(--font-body); font-weight: 500; }
+
+    .nav-group { margin-bottom: 8px; }
+    .nav-label {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--text-soft); padding: 0 12px;
+      margin-bottom: 4px; display: block;
+    }
+
+    .nav-btn {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 15px; font-weight: 600;
+      color: var(--text-mid);
+      background: transparent; border: none;
+      cursor: pointer; width: 100%;
+      text-align: left; transition: all 0.15s;
+      margin-bottom: 2px;
+    }
+    .nav-btn .icon {
+      width: 36px; height: 36px;
+      background: var(--cream); border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .nav-btn:hover  { background: var(--sage-light); color: var(--sage); }
+    .nav-btn:hover .icon { background: white; }
+    .nav-btn.active { background: var(--sage-light); color: var(--sage); }
+    .nav-btn.active .icon { background: var(--sage); }
 
     .nav-count {
-      margin-left: auto;
-      font-size: 0.75em;
-      background: var(--bg-card);
-      color: var(--green);
-      padding: 1px 6px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
+      margin-left: auto; font-size: 12px; font-weight: 700;
+      background: var(--sage-light); color: var(--sage);
+      padding: 2px 8px; border-radius: 20px;
+    }
+    .nav-new {
+      margin-left: auto; font-size: 11px; font-weight: 700;
+      background: var(--terra-light); color: var(--terra);
+      padding: 2px 7px; border-radius: 20px;
     }
 
-    /* ── BOTÓN MAPA ──────────────────────────────── */
     .btn-mapa {
-      margin-top: 20px;
-      background: transparent;
-      color: var(--green);
-      border: 1px solid var(--green);
-      padding: 11px 14px;
-      font-family: var(--font);
-      font-size: 0.8em;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      cursor: pointer;
-      border-radius: 3px;
-      width: 100%;
-      text-align: left;
-      transition: background 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      margin-top: 16px;
+      background: var(--sage);
+      color: white;
+      border: none;
+      padding: 14px 16px;
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 14px; font-weight: 700;
+      cursor: pointer; width: 100%;
+      display: flex; align-items: center; gap: 10px;
+      transition: background 0.15s;
     }
-    .btn-mapa:hover { background: rgba(90,173,78,0.1); }
-    .btn-mapa-icon { font-size: 1em; flex-shrink: 0; }
+    .btn-mapa:hover { background: var(--sage-mid); }
 
     .sidebar-footer {
-      margin-top: auto;
-      font-size: 0.7em;
-      color: var(--muted);
-      line-height: 1.7;
-      border-top: 1px solid var(--border);
-      padding-top: 16px;
+      margin-top: auto; padding-top: 20px;
+      border-top: 1px solid var(--border-soft);
+      font-size: 12px; color: var(--text-soft);
+      line-height: 1.8;
     }
 
     /* ── MAIN ────────────────────────────────────── */
-    .main {
-      flex: 1;
-      overflow-y: auto;
-      padding: 36px 40px;
+    .main { 
+      flex: 1; 
+      height: 100vh;
+      overflow-y: auto; 
+      padding: 40px 60px; 
     }
-
     .view { display: none; }
-    .view.active { display: block; }
+    .view.active { display: block; animation: fadeIn 0.3s ease; }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
+    .page-header { margin-bottom: 28px; }
     .page-title {
-      font-size: 1.3em;
-      color: var(--text);
+      font-family: var(--font-head);
+      font-size: 1.75em; color: var(--text);
       margin-bottom: 6px;
-      font-weight: bold;
     }
-    .page-sub {
-      font-size: 0.8em;
-      color: var(--muted);
-      margin-bottom: 28px;
-    }
-
-    /* ── FORMULARIO ──────────────────────────────── */
-    .form-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 28px;
-      max-width: 580px;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-    .form-row.full { grid-template-columns: 1fr; }
-
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-
-    label {
-      font-size: 0.75em;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    input[type="text"], select, textarea {
-      background: var(--bg-dark);
-      border: 1px solid var(--border);
-      color: var(--green);
-      font-family: var(--font);
-      font-size: 0.9em;
-      padding: 9px 11px;
-      border-radius: 3px;
-      transition: border-color 0.2s;
-    }
-    input[type="text"]:focus,
-    select:focus,
-    textarea:focus { outline: none; border-color: var(--green); }
-    textarea { resize: vertical; min-height: 68px; }
-    select option { background: var(--bg-dark); }
-
-    .btn-primary {
-      background: var(--green);
-      color: var(--bg-dark);
-      border: none;
-      padding: 12px 20px;
-      font-family: var(--font);
-      font-size: 0.85em;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      cursor: pointer;
-      border-radius: 3px;
-      width: 100%;
-      margin-top: 6px;
-      transition: background 0.2s, transform 0.1s;
-    }
-    .btn-primary:hover { background: var(--green-hi); }
-    .btn-primary:active { transform: scale(0.99); }
+    .page-sub { font-size: 15px; color: var(--text-soft); line-height: 1.5; max-width: 600px; }
 
     /* ── TOAST ───────────────────────────────────── */
     .toast {
-      display: none;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-radius: 4px;
-      font-size: 0.82em;
-      margin-bottom: 16px;
-      border: 1px solid var(--green);
-      background: rgba(90,173,78,0.08);
-      color: var(--green);
-      max-width: 580px;
+      display: none; align-items: center; gap: 12px;
+      padding: 14px 18px; border-radius: var(--radius-sm);
+      font-size: 15px; font-weight: 600;
+      margin-bottom: 24px; max-width: 600px;
+      background: var(--sage-light); color: var(--sage);
+      border: 1.5px solid var(--sage-mid);
     }
     .toast.show { display: flex; }
 
-    /* ── MERCADO ─────────────────────────────────── */
-    .filtro-row {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      max-width: 700px;
+    /* ── FORMULARIO ──────────────────────────────── */
+    .form-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      max-width: 620px;
+      box-shadow: var(--shadow);
     }
-    .filtro-row input { flex: 1; }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 18px;
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 18px; }
+    .form-row.full { grid-template-columns: 1fr; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+
+    label {
+      font-size: 14px; font-weight: 700;
+      color: var(--text-mid);
     }
+    .label-hint { font-size: 12px; font-weight: 500; color: var(--text-soft); margin-top: -4px; }
+
+    input[type="text"], select, textarea {
+      font-family: var(--font-body);
+      font-size: 15px;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--white);
+      color: var(--text);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      width: 100%;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--sage);
+      box-shadow: 0 0 0 3px rgba(74,124,89,0.12);
+    }
+    textarea { resize: vertical; min-height: 80px; }
+
+    .btn-primary {
+      background: var(--sage);
+      color: white; border: none;
+      padding: 14px 24px;
+      font-family: var(--font-body);
+      font-size: 16px; font-weight: 700;
+      border-radius: var(--radius-sm);
+      cursor: pointer; width: 100%;
+      margin-top: 8px; transition: background 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .btn-primary:hover { background: var(--sage-mid); }
+
+    /* ── DIRECTORIO ──────────────────────────────── */
+    .search-bar {
+      display: flex; gap: 10px; margin-bottom: 24px; max-width: 560px;
+    }
+    .search-bar input { flex: 1; }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
 
     .card {
-      background: var(--bg-card);
+      background: var(--white);
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: var(--radius);
       padding: 22px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      transition: border-color 0.2s;
+      display: flex; flex-direction: column; gap: 12px;
+      box-shadow: var(--shadow);
+      transition: box-shadow 0.15s, transform 0.15s;
     }
-    .card:hover { border-color: #3e453e; }
+    .card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
 
-    .card-nombre {
-      font-size: 1em;
-      font-weight: bold;
-      color: var(--green);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
+    .card-top { display: flex; align-items: flex-start; gap: 12px; }
+    .card-avatar {
+      width: 46px; height: 46px; border-radius: 10px;
+      background: var(--sage-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
     }
+    .card-nombre { font-size: 16px; font-weight: 800; color: var(--text); line-height: 1.3; }
+    .card-ubicacion { font-size: 13px; color: var(--text-soft); margin-top: 2px; }
 
-    .card-meta {
-      font-size: 0.78em;
-      color: var(--muted);
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
+    .tags { display: flex; gap: 6px; flex-wrap: wrap; }
     .tag {
+      font-size: 12px; font-weight: 600;
+      padding: 4px 10px; border-radius: 20px;
+      background: var(--cream); color: var(--text-mid);
       border: 1px solid var(--border);
-      padding: 2px 7px;
-      border-radius: 3px;
-      font-size: 0.75em;
-      color: var(--muted);
     }
+    .tag.verde { background: var(--sage-light); color: var(--sage); border-color: #B8D4C2; }
+    .tag.terra { background: var(--terra-light); color: var(--terra); border-color: #E8C4A8; }
 
-    .card-desc {
-      font-size: 0.82em;
-      color: var(--muted);
-      line-height: 1.6;
-      padding-top: 6px;
-      border-top: 1px solid var(--border);
+    .card-desc { font-size: 14px; color: var(--text-mid); line-height: 1.6; }
+    .card-volumen {
+      font-size: 14px; font-weight: 700;
+      color: var(--brown); padding: 8px 12px;
+      background: #FBF5EE; border-radius: var(--radius-sm);
+      border: 1px solid #E8D8C0;
     }
+    .card-id { font-size: 11px; color: var(--text-soft); word-break: break-all; font-family: monospace; }
 
-    .card-id {
-      font-size: 0.72em;
-      color: #444a44;
-      font-family: var(--font);
-      word-break: break-all;
-      padding-top: 4px;
+    .btn-contactar {
+      background: white; color: var(--sage);
+      border: 2px solid var(--sage);
+      padding: 11px 16px;
+      font-family: var(--font-body);
+      font-size: 14px; font-weight: 700;
+      border-radius: var(--radius-sm);
+      cursor: pointer; width: 100%;
+      transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
     }
-    .card-id b { color: #5a5e5a; font-weight: normal; }
-
-    .btn-acordar {
-      background: transparent;
-      color: var(--green);
-      border: 1px solid var(--green);
-      padding: 9px;
-      font-family: var(--font);
-      font-size: 0.8em;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      cursor: pointer;
-      border-radius: 3px;
-      transition: background 0.2s;
-    }
-    .btn-acordar:hover { background: rgba(90,173,78,0.1); }
+    .btn-contactar:hover { background: var(--sage); color: white; }
 
     .empty-state {
-      color: var(--muted);
-      font-size: 0.85em;
-      text-align: center;
-      padding: 48px 0;
-      grid-column: 1 / -1;
-      line-height: 2;
+      text-align: center; padding: 60px 0;
+      color: var(--text-soft); font-size: 15px;
+      grid-column: 1 / -1; line-height: 2.2;
+    }
+    .empty-state .emoji { font-size: 40px; display: block; margin-bottom: 12px; }
+
+    /* ── CERTIFICACIÓN ───────────────────────────── */
+    .cert-intro {
+      background: var(--terra-light);
+      border: 1.5px solid #E8C4A8;
+      border-radius: var(--radius);
+      padding: 20px 24px;
+      font-size: 15px; color: var(--text-mid);
+      line-height: 1.7; margin-bottom: 28px;
+      max-width: 860px;
+    }
+    .cert-intro b { color: var(--terra); }
+
+    .section-label {
+      font-size: 13px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--text-soft); margin-bottom: 14px; margin-top: 28px;
     }
 
-    /* ── MODAL ───────────────────────────────────── */
+    .cert-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px,1fr)); gap: 16px; max-width: 900px; }
+
+    .cert-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 22px;
+      display: flex; flex-direction: column; gap: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    .cert-head { display: flex; align-items: flex-start; gap: 14px; }
+    .cert-badge {
+      width: 48px; height: 48px; border-radius: 10px;
+      background: var(--sage-light); color: var(--sage);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 800; flex-shrink: 0;
+      letter-spacing: 0.02em;
+    }
+    .cert-name { font-size: 15px; font-weight: 800; color: var(--text); line-height: 1.3; }
+    .cert-org  { font-size: 12px; color: var(--text-soft); margin-top: 3px; }
+    .cert-desc { font-size: 14px; color: var(--text-mid); line-height: 1.65; flex: 1; }
+
+    .dificultad {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--text-soft); font-weight: 600;
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--border); }
+    .dot.on { background: var(--sage); }
+    .dot.on.terra { background: var(--terra); }
+
+    .cert-btns { display: flex; gap: 8px; margin-top: 8px;}
+    .btn-ver {
+      flex: 1; background: var(--cream); color: var(--text-mid);
+      border: 1.5px solid var(--border); padding: 10px;
+      font-family: var(--font-body); font-size: 13px; font-weight: 700;
+      border-radius: var(--radius-sm); cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-ver:hover { background: var(--border); }
+    .btn-cert {
+      flex: 2; background: var(--terra-light); color: var(--terra);
+      border: 1.5px solid #E8C4A8; padding: 10px;
+      font-family: var(--font-body); font-size: 13px; font-weight: 700;
+      border-radius: var(--radius-sm); cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-cert:hover { background: var(--terra); color: white; }
+
+    /* Institución */
+    .inst-card {
+      background: var(--white);
+      border: 1.5px solid #B8D4C2;
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      max-width: 860px;
+      box-shadow: var(--shadow);
+      margin-bottom: 40px;
+    }
+    .inst-title { font-family: var(--font-head); font-size: 1.1em; color: var(--sage); margin-bottom: 10px; }
+    .inst-desc  { font-size: 14px; color: var(--text-mid); line-height: 1.7; margin-bottom: 16px; }
+    .inst-list  { font-size: 14px; color: var(--text-mid); line-height: 2; list-style: none; }
+    .inst-list li::before { content: '✓ '; color: var(--sage); font-weight: 700; }
+    .btn-inst {
+      margin-top: 18px;
+      background: var(--sage); color: white; border: none;
+      padding: 13px 20px;
+      font-family: var(--font-body); font-size: 14px; font-weight: 700;
+      border-radius: var(--radius-sm); cursor: pointer;
+      transition: background 0.15s; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-inst:hover { background: var(--sage-mid); }
+
+    /* ── MODALES ─────────────────────────────────── */
     .modal-wrap {
-      display: none;
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.35); backdrop-filter: blur(3px);
+      align-items: center; justify-content: center; z-index: 200;
     }
     .modal-wrap.show { display: flex; }
-
     .modal {
-      background: var(--bg-dark);
-      border: 1px solid var(--green);
-      border-radius: 6px;
-      padding: 28px;
-      width: 360px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 32px;
+      width: 420px; max-width: 94vw;
+      box-shadow: var(--shadow-md);
+      display: flex; flex-direction: column; gap: 16px;
     }
-    .modal h3 { font-size: 0.95em; color: var(--green); text-transform: uppercase; }
-    .modal p  { font-size: 0.82em; color: var(--muted); line-height: 1.6; }
-    .modal-info { font-size: 0.88em; color: var(--text); line-height: 1.6; }
+    .modal-icon { font-size: 32px; }
+    .modal h3 { font-family: var(--font-head); font-size: 1.2em; color: var(--text); }
+    .modal p  { font-size: 14px; color: var(--text-mid); line-height: 1.6; }
+    .modal-info {
+      background: var(--cream); border-radius: var(--radius-sm);
+      padding: 14px 16px; font-size: 14px; color: var(--text-mid);
+      line-height: 1.7; border: 1px solid var(--border-soft);
+    }
     .modal-btns { display: flex; gap: 10px; margin-top: 4px; }
-    .btn-cancel {
-      flex: 1; background: transparent; color: var(--muted);
-      border: 1px solid var(--border); padding: 9px;
-      font-family: var(--font); font-size: 0.8em; cursor: pointer;
-      border-radius: 3px;
+    .btn-cancel-m {
+      flex: 1; background: var(--cream); color: var(--text-mid);
+      border: 1.5px solid var(--border); padding: 12px;
+      font-family: var(--font-body); font-size: 14px; font-weight: 700;
+      border-radius: var(--radius-sm); cursor: pointer;
     }
-    .btn-cancel:hover { color: var(--text); }
-    .btn-ok {
-      flex: 1; background: var(--green); color: var(--bg-dark);
-      border: none; padding: 9px; font-family: var(--font);
-      font-size: 0.8em; font-weight: bold; cursor: pointer;
-      border-radius: 3px;
+    .btn-ok-m {
+      flex: 2; background: var(--sage); color: white; border: none;
+      padding: 12px; font-family: var(--font-body);
+      font-size: 14px; font-weight: 700;
+      border-radius: var(--radius-sm); cursor: pointer;
+      transition: background 0.15s;
     }
+    .btn-ok-m:hover { background: var(--sage-mid); }
+    .btn-ok-m.terra { background: var(--terra); }
+    .btn-ok-m.terra:hover { background: #9A5A2E; }
   </style>
 </head>
 <body>
 
-<!-- SIDEBAR -->
 <nav class="sidebar">
-  <div class="logo">
-    Raíces<br>Digitales
-    <span>directorio de huertos · León</span>
+  <div class="logo-wrap">
+    <div class="logo-icon">🌱</div>
+    <div>
+      <div class="logo-text">Raíces<br>Digitales</div>
+      <div class="logo-sub">Red agrícola · Guanajuato</div>
+    </div>
   </div>
 
-  <div class="nav-item active" onclick="ir('registro', this)">Registrar huerto</div>
-  <div class="nav-item" onclick="ir('mercado', this)">
-    Directorio P2P <span class="nav-count" id="cnt">0</span>
+  <div class="nav-group">
+    <span class="nav-label">Productores</span>
+    <button class="nav-btn active" onclick="ir('registro',this)">
+      <span class="icon">📋</span>
+      Registrar productor
+    </button>
+    <button class="nav-btn" onclick="ir('directorio',this)">
+      <span class="icon">🗂️</span>
+      Directorio
+      <span class="nav-count" id="cnt">0</span>
+    </button>
   </div>
 
-  <!-- BOTÓN MAPA -->
+  <div class="nav-group">
+    <span class="nav-label">Apoyos</span>
+    <button class="nav-btn" onclick="ir('capacitacion',this)">
+      <span class="icon">🎓</span>
+      Certificación
+      <span class="nav-new">Nuevo</span>
+    </button>
+  </div>
+
   <button class="btn-mapa" onclick="abrirMapa()">
-    <span class="btn-mapa-icon">&#9651;</span> Ver mapa de huertos
+    📍 Ver mapa
   </button>
 
   <div class="sidebar-footer">
     El registro es gratuito.<br>
-    Tu dirección exacta nunca<br>
-    se publica en la red.
+    Tu ubicación exacta no se<br>
+    comparte sin tu permiso.
   </div>
 </nav>
 
-<!-- MAIN -->
 <main class="main">
 
-  <!-- VISTA: REGISTRO -->
   <div id="registro" class="view active">
-    <div class="page-title">Alta en la red</div>
-    <div class="page-sub">solo el barrio se muestra públicamente — nunca la dirección exacta</div>
+    <div class="page-header">
+      <div class="page-title">Registra tu producción</div>
+      <div class="page-sub">Completa los datos y te conectamos con compradores. Solo toma unos minutos.</div>
+    </div>
 
     <div id="toast-ok" class="toast">
-      ✓ Huerto registrado. Ya aparece en el directorio.
+      ✅ ¡Listo! Tu registro ya aparece en el directorio.
     </div>
 
     <div class="form-card">
       <div class="form-row">
         <div class="form-group">
-          <label>nombre del huerto</label>
-          <input type="text" id="f-nombre" placeholder="Ej. Nodo Coecillo">
+          <label>¿Cómo se llama tu huerto o rancho?</label>
+          <input type="text" id="f-nombre" placeholder="Ej. Rancho San Isidro">
         </div>
         <div class="form-group">
-          <label>barrio / zona</label>
-          <input type="text" id="f-barrio" placeholder="Ej. El Coecillo">
+          <label>¿En qué municipio estás?</label>
+          <input type="text" id="f-barrio" placeholder="Ej. Irapuato, Celaya…">
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label>técnica principal</label>
-          <select id="f-tecnica">
-            <option value="">— elige —</option>
-            <option>Agroecología</option>
-            <option>Hidroponía</option>
-            <option>Permacultura</option>
-            <option>Composta y suelo vivo</option>
-            <option>Milpa tradicional</option>
-            <option>Vertical</option>
-            <option>Otra</option>
+          <label>¿Qué tipo de productor eres?</label>
+          <select id="f-tipo">
+            <option value="">— elige una opción —</option>
+            <option>Huerto urbano</option>
+            <option>Pequeño agricultor</option>
+            <option>Cooperativa</option>
+            <option>Proveedor central de abastos</option>
+            <option>Productor de exportación</option>
           </select>
         </div>
         <div class="form-group">
-          <label>excedentes disponibles</label>
-          <input type="text" id="f-excedentes" placeholder="Ej. tomate, lechuga, hierbas">
+          <label>¿Cómo produces?</label>
+          <select id="f-tecnica">
+            <option value="">— elige una opción —</option>
+            <option>Agroecología</option>
+            <option>Hidroponía</option>
+            <option>Agricultura convencional</option>
+            <option>Agricultura orgánica</option>
+            <option>Permacultura</option>
+            <option>Invernadero</option>
+            <option>Campo abierto</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>¿Qué produces?</label>
+          <div class="label-hint">El producto o productos principales</div>
+          <input type="text" id="f-producto" placeholder="Ej. fresa, brócoli, lechuga">
+        </div>
+        <div class="form-group">
+          <label>¿Cuánto produces al mes?</label>
+          <div class="label-hint">Cantidad aproximada</div>
+          <input type="text" id="f-volumen" placeholder="Ej. 500 kg, 2 toneladas">
         </div>
       </div>
 
       <div class="form-row full">
         <div class="form-group">
-          <label>descripción breve (opcional)</label>
-          <textarea id="f-desc" placeholder="Historia del espacio, técnicas específicas, quiénes participan…"></textarea>
+          <label>¿Tienes alguna certificación? (opcional)</label>
+          <div class="label-hint">Si aún no tienes, te ayudamos a conseguirla</div>
+          <input type="text" id="f-certs" placeholder="Ej. BPA, GlobalG.A.P., Orgánico SENASICA…">
         </div>
       </div>
 
       <div class="form-row full">
         <div class="form-group">
-          <label>contacto para coordinación (solo visible si aceptas)</label>
-          <input type="text" id="f-contacto" placeholder="correo o WhatsApp">
+          <label>Cuéntanos un poco de tu producción (opcional)</label>
+          <div class="label-hint">Historia, experiencia, cómo trabajas…</div>
+          <textarea id="f-desc" placeholder="Ej. Llevamos 10 años cultivando fresa en campo abierto..."></textarea>
         </div>
       </div>
 
-      <button class="btn-primary" onclick="registrar()">Registrar huerto en la red</button>
+      <div class="form-row full">
+        <div class="form-group">
+          <label>¿Cómo te pueden contactar los compradores?</label>
+          <div class="label-hint">Correo electrónico o WhatsApp</div>
+          <input type="text" id="f-contacto" placeholder="Ej. rancho@correo.com / 477 000 0000">
+        </div>
+      </div>
+
+      <button class="btn-primary" onclick="registrar()">
+        🌱 Registrar mi producción
+      </button>
     </div>
   </div>
 
-  <!-- VISTA: DIRECTORIO -->
-  <div id="mercado" class="view">
-    <div class="page-title">Directorio P2P</div>
-    <div class="page-sub">huertos verificados por la comunidad · filtrar por nombre, barrio o técnica</div>
-
-    <div class="filtro-row">
-      <input type="text" id="filtro" placeholder="buscar…" oninput="renderMercado()">
+  <div id="directorio" class="view">
+    <div class="page-header">
+      <div class="page-title">Directorio de productores</div>
+      <div class="page-sub">Productores verificados en Guanajuato disponibles para vinculación comercial B2B.</div>
     </div>
 
-    <div class="grid" id="grid-huertos"></div>
+    <div class="search-bar">
+      <input type="text" id="filtro" placeholder="🔍  Buscar por nombre, municipio o producto…" oninput="renderDir()">
+    </div>
+
+    <div class="grid" id="grid-prod"></div>
+  </div>
+
+  <div id="capacitacion" class="view">
+    <div class="page-header">
+      <div class="page-title">Certificación e inocuidad</div>
+      <div class="page-sub">Con una certificación, tus productos llegan a mercados más grandes y mejor pagados.</div>
+    </div>
+
+    <div class="cert-intro">
+      <b>¿Para qué sirve certificarse?</b> Los compradores comerciales y restaurantes exigen que los alimentos
+      cumplan normas de higiene y calidad. Raíces Digitales te guía paso a paso y te conecta con instituciones locales que <b>subsidian el costo</b>.
+    </div>
+
+    <div class="section-label">Certificaciones principales</div>
+    <div class="cert-grid">
+
+      <div class="cert-card">
+        <div class="cert-head">
+          <div class="cert-badge">BPA</div>
+          <div>
+            <div class="cert-name">Buenas Prácticas Agrícolas</div>
+            <div class="cert-org">SENASICA — Secretaría de Agricultura</div>
+          </div>
+        </div>
+        <div class="cert-desc">Certifica que tu proceso de siembra y cosecha cumple con normas de higiene. Primer paso para vender a supermercados.</div>
+        <div class="dificultad">
+          <div class="dot on"></div><div class="dot on"></div><div class="dot"></div>
+          Dificultad media · 3 a 6 meses
+        </div>
+        <div class="cert-btns">
+          <button class="btn-ver" onclick="verInfo('BPA','Buenas Prácticas Agrícolas','SENASICA certifica. Requiere visita de campo, análisis de agua y registro de actividades. Tiempo: 3 a 6 meses. En Guanajuato el CESAVEG ofrece acompañamiento gratuito.')">¿Qué es?</button>
+          <button class="btn-cert" onclick="solCert('BPA — Buenas Prácticas Agrícolas')">Quiero certificarme →</button>
+        </div>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-head">
+          <div class="cert-badge">GAP</div>
+          <div>
+            <div class="cert-name">GlobalG.A.P.</div>
+            <div class="cert-org">Estándar internacional (+135 países)</div>
+          </div>
+        </div>
+        <div class="cert-desc">Abre puertas a cadenas como Walmart, HEB y mercados europeos. Cubre trazabilidad y bienestar del trabajador.</div>
+        <div class="dificultad">
+          <div class="dot on terra"></div><div class="dot on terra"></div><div class="dot on terra"></div>
+          Dificultad alta · requiere BPA previa
+        </div>
+        <div class="cert-btns">
+          <button class="btn-ver" onclick="verInfo('GlobalG.A.P.','Certificación internacional','Requiere auditoría externa. Costo entre $15,000 y $40,000 MXN. Existen programas de cofinanciamiento con SAGARPA y Secretaría del Campo de Guanajuato.')">¿Qué es?</button>
+          <button class="btn-cert" onclick="solCert('GlobalG.A.P.')">Quiero certificarme →</button>
+        </div>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-head">
+          <div class="cert-badge">ORG</div>
+          <div>
+            <div class="cert-name">Orgánico SENASICA</div>
+            <div class="cert-org">SENASICA / Acreditados SAGARPA</div>
+          </div>
+        </div>
+        <div class="cert-desc">Permite etiquetar y vender como "orgánico". Alta demanda en restaurantes de nicho y mercados premium.</div>
+        <div class="dificultad">
+          <div class="dot on terra"></div><div class="dot on terra"></div><div class="dot on terra"></div>
+          Dificultad alta · 3 años de transición
+        </div>
+        <div class="cert-btns">
+          <button class="btn-ver" onclick="verInfo('Orgánico SENASICA','Certificación orgánica','Requiere un período de 3 años sin agroquímicos, inspección anual y plan de manejo orgánico documentado.')">¿Qué es?</button>
+          <button class="btn-cert" onclick="solCert('Orgánico SENASICA')">Quiero certificarme →</button>
+        </div>
+      </div>
+
+      <div class="cert-card">
+        <div class="cert-head">
+          <div class="cert-badge">BPM</div>
+          <div>
+            <div class="cert-name">Buenas Prácticas Manufactura</div>
+            <div class="cert-org">COFEPRIS — Secretaría de Salud</div>
+          </div>
+        </div>
+        <div class="cert-desc">Aplica si lavas, empacas o refrigeras tu producto. Necesario para vender directo en supermercados.</div>
+        <div class="dificultad">
+          <div class="dot on"></div><div class="dot on"></div><div class="dot"></div>
+          Dificultad media · post-cosecha
+        </div>
+        <div class="cert-btns">
+          <button class="btn-ver" onclick="verInfo('BPM','Buenas Prácticas de Manufactura','Registro ante COFEPRIS y cumplimiento de la NOM-251-SSA1-2009. Aplica cuando hay manejo post-cosecha: lavado, empaque, refrigeración.')">¿Qué es?</button>
+          <button class="btn-cert" onclick="solCert('BPM — Buenas Prácticas de Manufactura')">Quiero certificarme →</button>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="section-label">Apoyo institucional disponible</div>
+    <div class="inst-card">
+      <div class="inst-title">Secretaría del Campo de Guanajuato (SECAM)</div>
+      <div class="inst-desc">
+        La SECAM tiene programas activos para apoyar a productores
+        en certificación, comercialización y tecnificación. Raíces Digitales
+        gestiona el primer contacto.
+      </div>
+      <ul class="inst-list">
+        <li>Subsidio parcial para certificaciones BPA y GlobalG.A.P.</li>
+        <li>Capacitación técnica gratuita en inocuidad</li>
+        <li>Conexión con compradores de exportación</li>
+        <li>Acceso a programas PROAGRO</li>
+      </ul>
+      <button class="btn-inst" onclick="solSec()">
+        📞 Solicitar vinculación con la SECAM
+      </button>
+    </div>
   </div>
 
 </main>
 
-<!-- MODAL COORDINAR -->
-<div class="modal-wrap" id="modal" onclick="cerrarModalFondo(event)">
+<div class="modal-wrap" id="m-contactar" onclick="cFondo(event,'m-contactar')">
   <div class="modal">
-    <h3>Coordinar entrega</h3>
-    <p>Se enviará tu solicitud al huerto. Ellos deciden si responden y cómo.</p>
-    <div class="modal-info" id="modal-info"></div>
+    <div class="modal-icon">🤝</div>
+    <h3>Contactar productor</h3>
+    <p>Le haremos llegar tu solicitud. El productor decide si responde y en qué términos.</p>
+    <div class="modal-info" id="m-contactar-info"></div>
     <div class="modal-btns">
-      <button class="btn-cancel" onclick="document.getElementById('modal').classList.remove('show')">Cancelar</button>
-      <button class="btn-ok" onclick="document.getElementById('modal').classList.remove('show')">Enviar solicitud</button>
+      <button class="btn-cancel-m" onclick="cerrar('m-contactar')">Cancelar</button>
+      <button class="btn-ok-m"     onclick="cerrar('m-contactar')">Enviar solicitud</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-wrap" id="m-cert-info" onclick="cFondo(event,'m-cert-info')">
+  <div class="modal">
+    <div class="modal-icon">📄</div>
+    <h3 id="mci-titulo"></h3>
+    <div class="modal-info" id="mci-cuerpo"></div>
+    <div class="modal-btns">
+      <button class="btn-ok-m" onclick="cerrar('m-cert-info')">Entendido</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-wrap" id="m-cert-sol" onclick="cFondo(event,'m-cert-sol')">
+  <div class="modal">
+    <div class="modal-icon">🎓</div>
+    <h3>Solicitud de certificación</h3>
+    <p>Registraremos tu interés y te conectaremos con el organismo o con la SECAM para iniciar el proceso.</p>
+    <div class="modal-info" id="mcs-cert"></div>
+    <div class="modal-btns">
+      <button class="btn-cancel-m" onclick="cerrar('m-cert-sol')">Cancelar</button>
+      <button class="btn-ok-m terra" onclick="cerrar('m-cert-sol')">Confirmar solicitud</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-wrap" id="m-sec" onclick="cFondo(event,'m-sec')">
+  <div class="modal">
+    <div class="modal-icon">🏛️</div>
+    <h3>Vinculación con la SECAM</h3>
+    <p>Raíces Digitales gestionará el contacto con la Secretaría del Campo de Guanajuato en tu nombre.</p>
+    <div class="modal-info">
+      Recibirás información sobre programas disponibles, fechas de capacitación
+      y los pasos para acceder a subsidios de certificación.
+    </div>
+    <div class="modal-btns">
+      <button class="btn-cancel-m" onclick="cerrar('m-sec')">Cancelar</button>
+      <button class="btn-ok-m"     onclick="cerrar('m-sec')">Quiero el contacto</button>
     </div>
   </div>
 </div>
 
 <script>
-  // ── CONFIGURA AQUÍ TU ENLACE DE GOOGLE MY MAPS ──────────────────────────
-  // 1. Entra a mymaps.google.com
-  // 2. Abre tu mapa
-  // 3. Clic en el ícono de compartir → copia el enlace
-  // 4. Pégalo entre las comillas de abajo
-  var MAP_URL = "https://www.google.com/maps/d/edit?hl=es-419&mid=1pSM-WerpUjESwBKnYsa3SrVMMPtg28ba&ll=21.08337138813542%2C-101.67414639999998&z=11";
-  // ────────────────────────────────────────────────────────────────────────
+  /* ── Configuración de Mapa y Almacenamiento ── */
+  var MAP_URL  = "https://www.google.com/maps"; 
+  var STORE    = 'rd_v4';
 
-  var STORE_KEY = 'rd_huertos_v2';
+  var EMOJIS = { 
+    'Huerto urbano':'🌿',
+    'Pequeño agricultor':'🌾',
+    'Cooperativa':'🤝',
+    'Proveedor central de abastos':'🏪',
+    'Productor de exportación':'🚚' 
+  };
 
-  function cargar() {
-    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
-    catch (e) { return []; }
-  }
+  function load()  { try { return JSON.parse(localStorage.getItem(STORE))||[]; } catch(e){ return []; } }
+  function save(l) { localStorage.setItem(STORE,JSON.stringify(l)); document.getElementById('cnt').textContent=l.length; }
 
-  function guardar(lista) {
-    localStorage.setItem(STORE_KEY, JSON.stringify(lista));
-    document.getElementById('cnt').textContent = lista.length;
-  }
-
-  function ir(vista, el) {
-    document.querySelectorAll('.view').forEach(function(v) { v.classList.remove('active'); });
-    document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
-    document.getElementById(vista).classList.add('active');
+  function ir(v,el) {
+    document.querySelectorAll('.view').forEach(function(x){ x.classList.remove('active'); });
+    document.querySelectorAll('.nav-btn').forEach(function(x){ x.classList.remove('active'); });
+    document.getElementById(v).classList.add('active');
     el.classList.add('active');
-    if (vista === 'mercado') renderMercado();
+    if(v==='directorio') renderDir();
   }
 
-  function abrirMapa() {
-    if (!MAP_URL || MAP_URL === '') {
-      alert('Agrega el enlace de tu mapa en la variable MAP_URL del código.');
-      return;
-    }
-    window.open(MAP_URL, '_blank');
-  }
+  function abrirMapa() { if(MAP_URL) window.open(MAP_URL,'_blank'); }
 
   function registrar() {
-    var nombre    = document.getElementById('f-nombre').value.trim();
-    var barrio    = document.getElementById('f-barrio').value.trim();
-    var tecnica   = document.getElementById('f-tecnica').value;
-    var excedente = document.getElementById('f-excedentes').value.trim();
-    var desc      = document.getElementById('f-desc').value.trim();
-    var contacto  = document.getElementById('f-contacto').value.trim();
+    var n = id('f-nombre').value.trim(), b = id('f-barrio').value.trim(),
+        t = id('f-tipo').value,          tc= id('f-tecnica').value,
+        p = id('f-producto').value.trim(),v = id('f-volumen').value.trim(),
+        c = id('f-certs').value.trim(),  d = id('f-desc').value.trim(),
+        co= id('f-contacto').value.trim();
 
-    if (!nombre || !barrio || !tecnica) {
-      alert('Nombre, barrio y técnica son obligatorios.');
-      return;
-    }
+    if (!n||!b||!t||!tc||!p) { alert('Por favor completa: nombre, municipio, tipo, cómo produces y qué produces.'); return; }
 
-    var lista = cargar();
-    lista.unshift({
-      id:        crypto.randomUUID(),
-      nombre:    nombre,
-      barrio:    barrio,
-      tecnica:   tecnica,
-      excedente: excedente,
-      desc:      desc || null,
-      contacto:  contacto || null,
-      fecha:     new Date().toLocaleDateString('es-MX', { day:'2-digit', month:'short', year:'numeric' })
-    });
-    guardar(lista);
+    var l = load();
+    l.unshift({ id:crypto.randomUUID().slice(0,8), nombre:n, barrio:b, tipo:t, tecnica:tc,
+      producto:p, volumen:v||null, certs:c||null, desc:d||null, contacto:co||null,
+      fecha:new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'short',year:'numeric'}) });
+    save(l);
 
-    var t = document.getElementById('toast-ok');
-    t.classList.add('show');
-    setTimeout(function() { t.classList.remove('show'); }, 3500);
-
-    ['f-nombre','f-barrio','f-excedentes','f-desc','f-contacto'].forEach(function(id) {
-      document.getElementById(id).value = '';
-    });
-    document.getElementById('f-tecnica').value = '';
+    var t2=id('toast-ok'); t2.classList.add('show');
+    setTimeout(function(){ t2.classList.remove('show'); },3500);
+    ['f-nombre','f-barrio','f-producto','f-volumen','f-certs','f-desc','f-contacto'].forEach(function(x){ id(x).value=''; });
+    id('f-tipo').value=''; id('f-tecnica').value='';
   }
 
-  function renderMercado() {
-    var q     = document.getElementById('filtro').value.trim().toLowerCase();
-    var lista = cargar();
-    var items = q
-      ? lista.filter(function(h) {
-          return h.nombre.toLowerCase().includes(q)
-              || h.barrio.toLowerCase().includes(q)
-              || h.tecnica.toLowerCase().includes(q);
-        })
-      : lista;
-
-    var grid = document.getElementById('grid-huertos');
-
+  function renderDir() {
+    var q=(id('filtro').value||'').trim().toLowerCase();
+    var l=load(), items=q?l.filter(function(h){return(h.nombre+h.barrio+h.producto+(h.tipo||'')).toLowerCase().includes(q);}):l;
+    var g=id('grid-prod');
     if (!items.length) {
-      grid.innerHTML = '<div class="empty-state">'
-        + (q ? 'sin resultados para "' + esc(q) + '"'
-             : 'aún no hay huertos registrados.<br>¡sé el primero en dar de alta el tuyo!')
-        + '</div>';
-      return;
+      g.innerHTML='<div class="empty-state"><span class="emoji">🌾</span>'
+        +(q?'Sin resultados para "'+esc(q)+'"'
+           :'Aún no hay productores registrados.<br>¡Sé el primer productor en la plataforma!')
+        +'</div>'; return;
     }
-
-    grid.innerHTML = items.map(function(h) {
+    g.innerHTML=items.map(function(h){
+      var em=EMOJIS[h.tipo]||'🌱';
+      var ct='';
+      if(h.certs) h.certs.split(',').forEach(function(c){ ct+='<span class="tag verde">✓ '+esc(c.trim())+'</span>'; });
       return '<div class="card">'
-        + '<div class="card-nombre">' + esc(h.nombre) + '</div>'
-        + '<div class="card-meta">'
-        +   '<span class="tag">' + esc(h.barrio) + '</span>'
-        +   '<span class="tag">' + esc(h.tecnica) + '</span>'
-        +   (h.excedente ? '<span class="tag">' + esc(h.excedente) + '</span>' : '')
-        + '</div>'
-        + (h.desc ? '<div class="card-desc">' + esc(h.desc) + '</div>' : '')
-        + '<div class="card-id"><b>id · </b>' + esc(h.id) + '<br><b>alta · </b>' + esc(h.fecha) + '</div>'
-        + '<button class="btn-acordar" onclick=\'abrirModal(' + JSON.stringify(h).replace(/'/g, "\\'") + ')\'>Coordinar entrega</button>'
-        + '</div>';
+        +'<div class="card-top">'
+        +'<div class="card-avatar">'+em+'</div>'
+        +'<div><div class="card-nombre">'+esc(h.nombre)+'</div>'
+        +'<div class="card-ubicacion">📍 '+esc(h.barrio)+'</div></div></div>'
+        +'<div class="tags">'
+        +'<span class="tag">'+esc(h.tecnica)+'</span>'
+        +'<span class="tag terra">'+esc(h.producto)+'</span>'
+        +ct+'</div>'
+        +(h.volumen?'<div class="card-volumen">📦 Disponible: '+esc(h.volumen)+'</div>':'')
+        +(h.desc?'<div class="card-desc">'+esc(h.desc)+'</div>':'')
+        +'<div class="card-id">ID: '+esc(h.id)+'  ·  Alta: '+esc(h.fecha)+'</div>'
+        +'<button class="btn-contactar" onclick=\'abrirContactar('+JSON.stringify(h).replace(/'/g,"\\'")+')\'>'
+        +'🤝 Contactar productor</button></div>';
     }).join('');
   }
 
-  function abrirModal(h) {
-    document.getElementById('modal-info').innerHTML =
-        '<b>' + esc(h.nombre) + '</b> · ' + esc(h.barrio) + '<br>'
-      + (h.excedente ? 'Excedentes: ' + esc(h.excedente) + '<br>' : '')
-      + (h.contacto
-          ? 'Contacto: ' + esc(h.contacto)
-          : 'Sin contacto público — el huerto responderá si acepta.');
-    document.getElementById('modal').classList.add('show');
+  function abrirContactar(h) {
+    id('m-contactar-info').innerHTML=
+      '<b>'+esc(h.nombre)+'</b> · '+esc(h.barrio)+'<br>'
+      +(h.producto?'Producto: '+esc(h.producto)+'<br>':'')
+      +(h.volumen?'Disponible: '+esc(h.volumen)+'<br>':'')
+      +(h.contacto?'Contacto: '+esc(h.contacto):'Sin contacto público — el productor responderá si acepta.');
+    id('m-contactar').classList.add('show');
   }
 
-  function cerrarModalFondo(e) {
-    if (e.target === document.getElementById('modal'))
-      document.getElementById('modal').classList.remove('show');
+  function verInfo(cod,nom,txt) {
+    id('mci-titulo').textContent=cod+' — '+nom;
+    id('mci-cuerpo').textContent=txt;
+    id('m-cert-info').classList.add('show');
   }
+  function solCert(nom) {
+    id('mcs-cert').innerHTML='Certificación: <b>'+esc(nom)+'</b>';
+    id('m-cert-sol').classList.add('show');
+  }
+  function solSec() { id('m-sec').classList.add('show'); }
+  function cerrar(i) { id(i).classList.remove('show'); }
+  function cFondo(e,i) { if(e.target===id(i)) cerrar(i); }
 
+  function id(x)  { return document.getElementById(x); }
   function esc(s) {
-    return String(s || '')
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return String(s||'').replace(/&/g,'&').replace(/</g,'<').replace(/>/g,'>').replace(/"/g,'"');
   }
 
-  guardar(cargar());
+  save(load()); // Inicializa contador
 </script>
 </body>
 </html>
